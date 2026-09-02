@@ -2,40 +2,81 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Custom Frequency Synth</title>
+  <title>Custom Frequency Synth - Drag & Drop Editor</title>
   <style>
-    body { font-family: sans-serif; background: #1a1a1a; color: #fff; text-align: center; padding: 20px; }
-    .synth-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
-    .key {
-      border: 2px solid #444; background: #2a2a2a; border-radius: 8px;
-      padding: 20px 15px; min-width: 90px; text-align: center; transition: all 0.1s;
+    body { font-family: sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
+    
+    /* Form e Controlli */
+    .editor-panel {
+      background: #1e1e1e; border: 1px solid #333; border-radius: 8px;
+      padding: 15px; max-width: 700px; margin: 0 auto 30px auto;
+      display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;
     }
-    .key.active { background: #00adb5; border-color: #eee; transform: translateY(4px); }
-    .shortcut { font-size: 1.4em; font-weight: bold; color: #00adb5; }
-    .key.active .shortcut { color: #fff; }
-    .custom-name { font-size: 1.1em; margin: 10px 0 5px; }
-    .freq { font-size: 0.85em; color: #888; }
+    .editor-panel input {
+      padding: 8px; border-radius: 4px; border: 1px solid #444; background: #2a2a2a; color: #fff; width: 110px;
+    }
+    .editor-panel button, .btn-delete {
+      padding: 8px 15px; border-radius: 4px; border: none; background: #00adb5; color: #fff; cursor: pointer; font-weight: bold;
+    }
+    .editor-panel button:hover { background: #008c93; }
+    .btn-reset { background: #555 !important; }
+    .btn-reset:hover { background: #666 !important; }
+
+    /* Contenitore Sintetizzatore */
+    .synth-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+    .key-card {
+      border: 2px solid #333; background: #222; border-radius: 8px;
+      padding: 15px; width: 120px; display: flex; flex-direction: column; gap: 6px; position: relative; transition: all 0.1s;
+      cursor: grab;
+    }
+    .key-card:active { cursor: grabbing; }
+    .key-card.dragging { opacity: 0.4; border-color: #00adb5; }
+    .key-card.drag-over { border-color: #fff; transform: scale(1.05); }
+    .key-card.active { background: #00adb5; border-color: #fff; transform: translateY(4px); }
+    .key-card.active input { background: transparent; color: #fff; border-color: rgba(255,255,255,0.5); }
+    
+    /* Input dentro la scheda */
+    .key-card input {
+      background: #1a1a1a; border: 1px solid #444; color: #eee;
+      border-radius: 4px; padding: 4px; text-align: center; font-size: 0.9em;
+    }
+    .key-card input.key-shortcut { font-weight: bold; font-size: 1.1em; color: #00adb5; text-transform: uppercase; }
+    .key-card.active input.key-shortcut { color: #fff; }
+    
+    .btn-delete { background: #ff4d4d; padding: 2px 6px; font-size: 0.8em; position: absolute; top: 5px; right: 5px; }
+    .btn-delete:hover { background: #cc0000; }
   </style>
 </head>
 <body>
 
-  <h1>Sintetizzatore a Frequenze Personalizzate</h1>
-  <p>Premi i tasti della tastiera per suonare le frequenze configurate:</p>
+  <h1>Sintetizzatore Interattivo (Drag & Drop)</h1>
 
+  <!-- Form di Inserimento & Reset -->
+  <div class="editor-panel">
+    <input type="text" id="newKey" placeholder="Tasto (es. z)" maxlength="1">
+    <input type="text" id="newName" placeholder="Nome">
+    <input type="number" id="newFreq" placeholder="Freq (Hz)" step="0.1">
+    <button onclick="addKey()">+ Aggiungi</button>
+    <button class="btn-reset" onclick="resetDefaults()">Ripristina Default</button>
+  </div>
+
+  <!-- Area Tastiera Synth -->
   <div class="synth-container" id="synth"></div>
 
   <script>
-    // 1. CONFIGURAZIONE: Personalizza tasto, nome e frequenza (Hz)
-    const soundMap = [
-      { key: 'a', name: 'Basso',    freq: 110.0 }, // La1
-      { key: 's', name: 'Calmo',    freq: 220.0 }, // La2
-      { key: 'd', name: 'Armonia',  freq: 432.0 }, // 432 Hz
-      { key: 'f', name: 'Standard', freq: 440.0 }, // La3 (440 Hz)
-      { key: 'g', name: 'Luce',     freq: 528.0 }, // 528 Hz (Solfeggio)
-      { key: 'h', name: 'Acuto',    freq: 880.0 }  // La4
+    // 1. CONFIGURAZIONE DI DEFAULT
+    const defaultSoundMap = [
+      { key: 'a', name: 'Basso',    freq: 110.0 },
+      { key: 's', name: 'Calmo',    freq: 220.0 },
+      { key: 'd', name: 'Armonia',  freq: 432.0 },
+      { key: 'f', name: 'Standard', freq: 440.0 },
+      { key: 'g', name: 'Luce',     freq: 528.0 },
+      { key: 'h', name: 'Acuto',    freq: 880.0 }
     ];
 
-    // 2. WEB AUDIO API INITIALIZATION
+    let soundMap = JSON.parse(localStorage.getItem('myCustomSynth')) || [...defaultSoundMap];
+
+    // 2. AUDIO CONTEXT
     let audioCtx = null;
     const activeOscillators = {};
 
@@ -45,32 +86,135 @@
       }
     }
 
-    // 3. GENERAZIONE INTERFACCIA GRAFICA
-    const container = document.getElementById('synth');
-    soundMap.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'key';
-      div.id = `key-${item.key}`;
-      div.innerHTML = `
-        <div class="shortcut">${item.key.toUpperCase()}</div>
-        <div class="custom-name">${item.name}</div>
-        <div class="freq">${item.freq} Hz</div>
-      `;
-      container.appendChild(div);
-    });
+    function saveState() {
+      localStorage.setItem('myCustomSynth', JSON.stringify(soundMap));
+    }
 
-    // 4. FUNZIONI AUDIO (PLAY / STOP)
+    // 3. RENDERING DINAMICO & DRAG AND DROP LOGIC
+    let draggedIndex = null;
+
+    function renderSynth() {
+      const container = document.getElementById('synth');
+      container.innerHTML = '';
+
+      soundMap.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'key-card';
+        card.id = `key-${item.key.toLowerCase()}`;
+        card.setAttribute('draggable', 'true');
+        card.dataset.index = index;
+
+        card.innerHTML = `
+          <button class="btn-delete" onclick="removeKey(${index})">✕</button>
+          <label style="font-size:0.7em; color:#888; pointer-events:none;">TASTO</label>
+          <input type="text" class="key-shortcut" value="${item.key}" maxlength="1" onchange="updateItem(${index}, 'key', this.value)">
+          
+          <label style="font-size:0.7em; color:#888; pointer-events:none;">NOME</label>
+          <input type="text" value="${item.name}" onchange="updateItem(${index}, 'name', this.value)">
+          
+          <label style="font-size:0.7em; color:#888; pointer-events:none;">FREQ (Hz)</label>
+          <input type="number" value="${item.freq}" step="0.1" onchange="updateItem(${index}, 'freq', this.value)">
+        `;
+
+        // Eventi Drag & Drop
+        card.addEventListener('dragstart', (e) => {
+          draggedIndex = index;
+          card.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+          document.querySelectorAll('.key-card').forEach(c => c.classList.remove('drag-over'));
+        });
+
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          card.classList.add('drag-over');
+        });
+
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drag-over');
+        });
+
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          card.classList.remove('drag-over');
+
+          if (draggedIndex !== null && draggedIndex !== index) {
+            // Scambia gli elementi nell'array
+            const movedItem = soundMap.splice(draggedIndex, 1)[0];
+            soundMap.splice(index, 0, movedItem);
+
+            saveState();
+            renderSynth();
+          }
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    // 4. GESTIONE STATO (AGGIUNGI, MODIFICA, ELIMINA, RESET)
+    function addKey() {
+      const keyInput = document.getElementById('newKey');
+      const nameInput = document.getElementById('newName');
+      const freqInput = document.getElementById('newFreq');
+
+      if (!keyInput.value || !freqInput.value) {
+        alert("Inserisci almeno il tasto e la frequenza!");
+        return;
+      }
+
+      soundMap.push({
+        key: keyInput.value.toLowerCase(),
+        name: nameInput.value || 'Nota',
+        freq: parseFloat(freqInput.value)
+      });
+
+      saveState();
+      renderSynth();
+
+      keyInput.value = '';
+      nameInput.value = '';
+      freqInput.value = '';
+    }
+
+    function updateItem(index, property, value) {
+      if (property === 'freq') value = parseFloat(value) || 0;
+      if (property === 'key') value = value.toLowerCase();
+      
+      soundMap[index][property] = value;
+      saveState();
+      renderSynth();
+    }
+
+    function removeKey(index) {
+      soundMap.splice(index, 1);
+      saveState();
+      renderSynth();
+    }
+
+    function resetDefaults() {
+      if (confirm("Vuoi davvero ripristinare i tasti di default?")) {
+        soundMap = JSON.parse(JSON.stringify(defaultSoundMap));
+        saveState();
+        renderSynth();
+      }
+    }
+
+    // 5. MOTORE AUDIO
     function playFrequency(key, freq) {
       initAudio();
-      if (activeOscillators[key]) return; // Evita ripetizioni se il tasto è tenuto premuto
+      if (activeOscillators[key]) return;
 
       const osc = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
 
-      osc.type = 'sine'; // Tipi disponibili: 'sine', 'square', 'sawtooth', 'triangle'
+      osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-      // Inviluppo per evitare il "clic" audio all'avvio
       gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
       gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
 
@@ -88,7 +232,6 @@
       if (!activeOscillators[key]) return;
 
       const { osc, gainNode } = activeOscillators[key];
-      // Inviluppo di rilascio dolce
       gainNode.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
       
       setTimeout(() => {
@@ -101,18 +244,25 @@
       if (keyEl) keyEl.classList.remove('active');
     }
 
-    // 5. EVENT LISTENERS PER LA TASTIERA
+    // 6. EVENT LISTENERS
     window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
       const key = e.key.toLowerCase();
-      const match = soundMap.find(item => item.key === key);
-      if (match) playFrequency(match.key, match.freq);
+      const match = soundMap.find(item => item.key.toLowerCase() === key);
+      if (match) playFrequency(match.key.toLowerCase(), match.freq);
     });
 
     window.addEventListener('keyup', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
       const key = e.key.toLowerCase();
-      const match = soundMap.find(item => item.key === key);
-      if (match) stopFrequency(match.key);
+      const match = soundMap.find(item => item.key.toLowerCase() === key);
+      if (match) stopFrequency(match.key.toLowerCase());
     });
+
+    // Inizializza l'interfaccia all'avvio
+    renderSynth();
   </script>
 </body>
 </html>
