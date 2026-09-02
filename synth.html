@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Frequency Synth</title>
+  <style>
+    body { font-family: sans-serif; background: #1a1a1a; color: #fff; text-align: center; padding: 20px; }
+    .synth-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+    .key {
+      border: 2px solid #444; background: #2a2a2a; border-radius: 8px;
+      padding: 20px 15px; min-width: 90px; text-align: center; transition: all 0.1s;
+    }
+    .key.active { background: #00adb5; border-color: #eee; transform: translateY(4px); }
+    .shortcut { font-size: 1.4em; font-weight: bold; color: #00adb5; }
+    .key.active .shortcut { color: #fff; }
+    .custom-name { font-size: 1.1em; margin: 10px 0 5px; }
+    .freq { font-size: 0.85em; color: #888; }
+  </style>
+</head>
+<body>
+
+  <h1>Sintetizzatore a Frequenze Personalizzate</h1>
+  <p>Premi i tasti della tastiera per suonare le frequenze configurate:</p>
+
+  <div class="synth-container" id="synth"></div>
+
+  <script>
+    // 1. CONFIGURAZIONE: Personalizza tasto, nome e frequenza (Hz)
+    const soundMap = [
+      { key: 'a', name: 'Basso',    freq: 110.0 }, // La1
+      { key: 's', name: 'Calmo',    freq: 220.0 }, // La2
+      { key: 'd', name: 'Armonia',  freq: 432.0 }, // 432 Hz
+      { key: 'f', name: 'Standard', freq: 440.0 }, // La3 (440 Hz)
+      { key: 'g', name: 'Luce',     freq: 528.0 }, // 528 Hz (Solfeggio)
+      { key: 'h', name: 'Acuto',    freq: 880.0 }  // La4
+    ];
+
+    // 2. WEB AUDIO API INITIALIZATION
+    let audioCtx = null;
+    const activeOscillators = {};
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // 3. GENERAZIONE INTERFACCIA GRAFICA
+    const container = document.getElementById('synth');
+    soundMap.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'key';
+      div.id = `key-${item.key}`;
+      div.innerHTML = `
+        <div class="shortcut">${item.key.toUpperCase()}</div>
+        <div class="custom-name">${item.name}</div>
+        <div class="freq">${item.freq} Hz</div>
+      `;
+      container.appendChild(div);
+    });
+
+    // 4. FUNZIONI AUDIO (PLAY / STOP)
+    function playFrequency(key, freq) {
+      initAudio();
+      if (activeOscillators[key]) return; // Evita ripetizioni se il tasto è tenuto premuto
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = 'sine'; // Tipi disponibili: 'sine', 'square', 'sawtooth', 'triangle'
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      // Inviluppo per evitare il "clic" audio all'avvio
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start();
+      activeOscillators[key] = { osc, gainNode };
+
+      const keyEl = document.getElementById(`key-${key}`);
+      if (keyEl) keyEl.classList.add('active');
+    }
+
+    function stopFrequency(key) {
+      if (!activeOscillators[key]) return;
+
+      const { osc, gainNode } = activeOscillators[key];
+      // Inviluppo di rilascio dolce
+      gainNode.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      
+      setTimeout(() => {
+        osc.stop();
+        osc.disconnect();
+        delete activeOscillators[key];
+      }, 100);
+
+      const keyEl = document.getElementById(`key-${key}`);
+      if (keyEl) keyEl.classList.remove('active');
+    }
+
+    // 5. EVENT LISTENERS PER LA TASTIERA
+    window.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      const match = soundMap.find(item => item.key === key);
+      if (match) playFrequency(match.key, match.freq);
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+      const match = soundMap.find(item => item.key === key);
+      if (match) stopFrequency(match.key);
+    });
+  </script>
+</body>
+</html>
