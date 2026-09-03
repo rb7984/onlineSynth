@@ -173,65 +173,65 @@ const presetList = [
         ]
     },
     {
-    id: 'edo53',
-    label: '53 EDO (Ultra-Precise / Turkish Makam System)',
-    data: [
-        { key: '1', name: 'Step 0 - A', freq: 440.0 },
-        { key: '2', name: 'Step 1', freq: 445.8 },
-        { key: '3', name: 'Step 2', freq: 451.7 },
-        { key: '4', name: 'Step 3', freq: 457.6 },
-        { key: '5', name: 'Step 4', freq: 463.6 },
-        { key: '6', name: 'Step 5', freq: 469.7 },
-        { key: '7', name: 'Step 6', freq: 475.9 },
-        { key: '8', name: 'Step 7', freq: 482.1 },
-        { key: '9', name: 'Step 8', freq: 488.5 },
-        { key: '0', name: 'Step 9 - B (approx)', freq: 494.9 },
-        { key: 'q', name: 'Step 10', freq: 501.4 },
-        { key: 'w', name: 'Step 11', freq: 508.0 },
-        { key: 'e', name: 'Step 12', freq: 514.6 },
-        { key: 'r', name: 'Step 13', freq: 521.4 },
-        { key: 't', name: 'Step 14 - C (approx)', freq: 528.2 },
-        { key: 'y', name: 'Step 15', freq: 535.2 },
-        { key: 'u', name: 'Step 16', freq: 542.2 },
-        { key: 'i', name: 'Step 17', freq: 549.3 },
-        { key: 'o', name: 'Step 18 - C# (5/4)', freq: 556.5 },
-        { key: 'p', name: 'Step 19', freq: 563.8 },
-        { key: 'a', name: 'Step 20', freq: 571.2 },
-        { key: 's', name: 'Step 21', freq: 578.7 },
-        { key: 'd', name: 'Step 22 - D (approx)', freq: 586.3 },
-        { key: 'f', name: 'Step 23', freq: 594.0 },
-        { key: 'g', name: 'Step 24', freq: 601.8 },
-        { key: 'h', name: 'Step 25', freq: 609.7 },
-        { key: 'j', name: 'Step 26', freq: 617.7 },
-        { key: 'k', name: 'Step 27', freq: 625.8 },
-        { key: 'l', name: 'Step 28', freq: 634.0 },
-        { key: 'z', name: 'Step 29', freq: 642.3 },
-        { key: 'x', name: 'Step 30', freq: 650.7 },
-        { key: 'c', name: 'Step 31 - E (3/2 Quinta)', freq: 659.2 },
-        { key: 'v', name: 'Step 32', freq: 667.9 },
-        { key: 'b', name: 'Step 33', freq: 676.6 },
-        { key: 'n', name: 'Step 34', freq: 685.5 },
-        { key: 'm', name: 'Step 35', freq: 694.5 },
-        { key: 'Q', name: 'Step 36 - F (approx)', freq: 703.6 },
-        { key: 'W', name: 'Step 37', freq: 712.8 },
-        { key: 'E', name: 'Step 38', freq: 722.1 },
-        { key: 'R', name: 'Step 39', freq: 731.6 },
-        { key: 'T', name: 'Step 40', freq: 741.2 },
-        { key: 'Y', name: 'Step 41', freq: 750.9 },
-        { key: 'U', name: 'Step 42', freq: 760.7 },
-        { key: 'I', name: 'Step 43', freq: 770.7 },
-        { key: 'O', name: 'Step 44 - G (approx)', freq: 780.8 },
-        { key: 'P', name: 'Step 45', freq: 791.0 },
-        { key: 'A', name: 'Step 46', freq: 801.4 },
-        { key: 'S', name: 'Step 47', freq: 811.9 },
-        { key: 'D', name: 'Step 48', freq: 822.5 },
-        { key: 'F', name: 'Step 49', freq: 833.3 },
-        { key: 'G', name: 'Step 50', freq: 844.2 },
-        { key: 'H', name: 'Step 51', freq: 855.3 },
-        { key: 'J', name: 'Step 52', freq: 866.5 },
-        { key: 'K', name: 'Step 53 - A (Octave)', freq: 880.0 }
-    ]
-}
+        id: 'edo53',
+        label: '53 EDO (Ultra-Precise / Turkish Makam System)',
+        data: [
+            { key: '1', name: 'Step 0 - A', freq: 440.0 },
+            { key: '2', name: 'Step 1', freq: 445.8 },
+            { key: '3', name: 'Step 2', freq: 451.7 },
+            { key: '4', name: 'Step 3', freq: 457.6 },
+            { key: '5', name: 'Step 4', freq: 463.6 },
+            { key: '6', name: 'Step 5', freq: 469.7 },
+            { key: '7', name: 'Step 6', freq: 475.9 },
+            { key: '8', name: 'Step 7', freq: 482.1 },
+            { key: '9', name: 'Step 8', freq: 488.5 },
+            { key: '0', name: 'Step 9 - B (approx)', freq: 494.9 },
+            { key: 'q', name: 'Step 10', freq: 501.4 },
+            { key: 'w', name: 'Step 11', freq: 508.0 },
+            { key: 'e', name: 'Step 12', freq: 514.6 },
+            { key: 'r', name: 'Step 13', freq: 521.4 },
+            { key: 't', name: 'Step 14 - C (approx)', freq: 528.2 },
+            { key: 'y', name: 'Step 15', freq: 535.2 },
+            { key: 'u', name: 'Step 16', freq: 542.2 },
+            { key: 'i', name: 'Step 17', freq: 549.3 },
+            { key: 'o', name: 'Step 18 - C# (5/4)', freq: 556.5 },
+            { key: 'p', name: 'Step 19', freq: 563.8 },
+            { key: 'a', name: 'Step 20', freq: 571.2 },
+            { key: 's', name: 'Step 21', freq: 578.7 },
+            { key: 'd', name: 'Step 22 - D (approx)', freq: 586.3 },
+            { key: 'f', name: 'Step 23', freq: 594.0 },
+            { key: 'g', name: 'Step 24', freq: 601.8 },
+            { key: 'h', name: 'Step 25', freq: 609.7 },
+            { key: 'j', name: 'Step 26', freq: 617.7 },
+            { key: 'k', name: 'Step 27', freq: 625.8 },
+            { key: 'l', name: 'Step 28', freq: 634.0 },
+            { key: 'z', name: 'Step 29', freq: 642.3 },
+            { key: 'x', name: 'Step 30', freq: 650.7 },
+            { key: 'c', name: 'Step 31 - E (3/2 Quinta)', freq: 659.2 },
+            { key: 'v', name: 'Step 32', freq: 667.9 },
+            { key: 'b', name: 'Step 33', freq: 676.6 },
+            { key: 'n', name: 'Step 34', freq: 685.5 },
+            { key: 'm', name: 'Step 35', freq: 694.5 },
+            { key: 'Q', name: 'Step 36 - F (approx)', freq: 703.6 },
+            { key: 'W', name: 'Step 37', freq: 712.8 },
+            { key: 'E', name: 'Step 38', freq: 722.1 },
+            { key: 'R', name: 'Step 39', freq: 731.6 },
+            { key: 'T', name: 'Step 40', freq: 741.2 },
+            { key: 'Y', name: 'Step 41', freq: 750.9 },
+            { key: 'U', name: 'Step 42', freq: 760.7 },
+            { key: 'I', name: 'Step 43', freq: 770.7 },
+            { key: 'O', name: 'Step 44 - G (approx)', freq: 780.8 },
+            { key: 'P', name: 'Step 45', freq: 791.0 },
+            { key: 'A', name: 'Step 46', freq: 801.4 },
+            { key: 'S', name: 'Step 47', freq: 811.9 },
+            { key: 'D', name: 'Step 48', freq: 822.5 },
+            { key: 'F', name: 'Step 49', freq: 833.3 },
+            { key: 'G', name: 'Step 50', freq: 844.2 },
+            { key: 'H', name: 'Step 51', freq: 855.3 },
+            { key: 'J', name: 'Step 52', freq: 866.5 },
+            { key: 'K', name: 'Step 53 - A (Octave)', freq: 880.0 }
+        ]
+    }
 ];
 
 // Stato corrente
@@ -439,20 +439,30 @@ function startRandomSequence() {
     playBtn.innerText = '⏹ Ferma Sequenza';
     playBtn.className = 'btn-stop';
 
-    const totalSteps = parseInt(document.getElementById('seqLength').value) || 16;
     const bpm = parseInt(document.getElementById('seqSpeed').value) || 240;
     const stepIntervalMs = (60 / bpm) * 1000;
     const noteDurationMs = stepIntervalMs * 0.8;
 
-    // Genera lista di indici casuali basati sulle schede correnti
-    const randomIndexSequence = [];
-    for (let i = 0; i < totalSteps; i++) {
-        const randIdx = Math.floor(Math.random() * soundMap.length);
-        randomIndexSequence.push(randIdx);
+    // Legge il campo di testo per la sequenza custom
+    const customSeqInput = document.getElementById('seq').value;
+    const parsedCustomSeq = parseSequenceInput(customSeqInput);
+
+    let playSequence = [];
+
+    if (parsedCustomSeq) {
+        // 1. Usa la sequenza definita dall'utente nella textbox
+        playSequence = parsedCustomSeq;
+    } else {
+        // 2. Se vuota o non valida, genera la sequenza casuale
+        const totalSteps = parseInt(document.getElementById('seqLength').value) || 16;
+        for (let i = 0; i < totalSteps; i++) {
+            const randIdx = Math.floor(Math.random() * soundMap.length);
+            playSequence.push(randIdx);
+        }
     }
 
-    // Esegue la sequenza
-    randomIndexSequence.forEach((itemIndex, step) => {
+    // Esegue la sequenza finale
+    playSequence.forEach((itemIndex, step) => {
         const item = soundMap[itemIndex];
         const key = item.key.toLowerCase();
         const freq = item.freq;
@@ -470,7 +480,8 @@ function startRandomSequence() {
         sequenceTimeouts.push(startT);
     });
 
-    const totalDuration = totalSteps * stepIntervalMs;
+    // Timer finale per resettare lo stato a fine riproduzione
+    const totalDuration = playSequence.length * stepIntervalMs;
     const endT = setTimeout(() => {
         stopRandomSequence();
     }, totalDuration);
@@ -489,6 +500,18 @@ function stopRandomSequence() {
         playBtn.innerText = '▶ Play Sequenza Random';
         playBtn.className = 'btn-play';
     }
+}
+
+function parseSequenceInput(inputStr) {
+    if (!inputStr || !inputStr.trim()) return null;
+
+    // Divide per trattino, virgola o spazio e filtra i valori non numerici
+    const indices = inputStr
+        .split(/[-,\s]+/)
+        .map(val => parseInt(val.trim(), 10))
+        .filter(num => !isNaN(num) && num >= 0 && num < soundMap.length);
+
+    return indices.length > 0 ? indices : null;
 }
 
 // 6. MOTORE AUDIO
