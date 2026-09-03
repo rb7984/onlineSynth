@@ -1,0 +1,249 @@
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: sans-serif;
+        background: #121212;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* BARRA LATERALE PRESET */
+    .sidebar {
+        width: 220px;
+        background: #181818;
+        border-right: 1px solid #2a2a2a;
+        padding: 20px 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .sidebar h2 {
+        font-size: 1.1em;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .preset-btn {
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #222;
+        color: #ccc;
+        cursor: pointer;
+        text-align: left;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+        background: #2a2a2a;
+        color: #fff;
+    }
+
+    .preset-btn.active {
+        background: #00adb5;
+        color: #fff;
+        border-color: #00adb5;
+    }
+
+    /* CONTENUTO PRINCIPALE */
+    .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        text-align: center;
+    }
+
+    /* Form e Controlli */
+    .editor-panel {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 15px;
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .editor-panel input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        background: #2a2a2a;
+        color: #fff;
+        width: 110px;
+    }
+
+    .editor-panel button,
+    .btn-delete {
+        padding: 8px 15px;
+        border-radius: 4px;
+        border: none;
+        background: #00adb5;
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .editor-panel button:hover {
+        background: #008c93;
+    }
+
+    .btn-reset {
+        background: #555 !important;
+    }
+
+    .btn-reset:hover {
+        background: #666 !important;
+    }
+
+    /* CONTROLLI SEQUENCER */
+    .sequencer-panel {
+        background: #1a232a;
+        border: 1px solid #00adb5;
+        border-radius: 8px;
+        padding: 15px;
+        max-width: 800px;
+        margin: 0 auto 25px auto;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-play {
+        background: #28a745 !important;
+        font-size: 1.05em;
+        padding: 10px 20px !important;
+    }
+
+    .btn-play:hover {
+        background: #218838 !important;
+    }
+
+    .btn-stop {
+        background: #dc3545 !important;
+        font-size: 1.05em;
+        padding: 10px 20px !important;
+    }
+
+    .btn-stop:hover {
+        background: #c82333 !important;
+    }
+
+    .seq-input-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9em;
+        color: #ccc;
+    }
+
+    .seq-input-group input {
+        padding: 6px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        background: #2a2a2a;
+        color: #fff;
+        width: 65px;
+        text-align: center;
+    }
+
+    /* Contenitore Sintetizzatore */
+    .synth-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .key-card {
+        border: 2px solid #333;
+        background: #222;
+        border-radius: 8px;
+        padding: 15px;
+        width: 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: relative;
+        transition: all 0.1s;
+        cursor: grab;
+    }
+
+    .key-card:active {
+        cursor: grabbing;
+    }
+
+    .key-card.dragging {
+        opacity: 0.4;
+        border-color: #00adb5;
+    }
+
+    .key-card.drag-over {
+        border-color: #fff;
+        transform: scale(1.05);
+    }
+
+    .key-card.active {
+        background: #00adb5;
+        border-color: #fff;
+        transform: translateY(4px);
+    }
+
+    .key-card.active input {
+        background: transparent;
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Input dentro la scheda */
+    .key-card input {
+        background: #1a1a1a;
+        border: 1px solid #444;
+        color: #eee;
+        border-radius: 4px;
+        padding: 4px;
+        text-align: center;
+        font-size: 0.9em;
+    }
+
+    .key-card input.key-shortcut {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #00adb5;
+        text-transform: uppercase;
+    }
+
+    .key-card.active input.key-shortcut {
+        color: #fff;
+    }
+
+    .btn-delete {
+        background: #ff4d4d;
+        padding: 2px 6px;
+        font-size: 0.8em;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .btn-delete:hover {
+        background: #cc0000;
+    }
